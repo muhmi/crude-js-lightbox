@@ -116,7 +116,8 @@ Lightbox.prototype.next = function() {
 }
 
 Lightbox.prototype.open = function() {
-	event.stopPropagation();
+	if (typeof(event) != 'undefined')
+		event.stopPropagation();
 	
 	this.overlay.fadeIn();
 						
@@ -132,15 +133,15 @@ Lightbox.prototype.open = function() {
 	light.css("display", "block");
 
 	
-	light.click(function() {event.stopPropagation();});
+	light.click(function() {if (event) event.stopPropagation();});
 	
 	leftButton.click(function() {
-		event.stopPropagation();
+		if (typeof(event) != 'undefined') event.stopPropagation();
 		lb.prev();
 	});
 	
 	rightButton.click(function() {
-		event.stopPropagation();
+		if (typeof(event) != 'undefined') event.stopPropagation();
 		lb.next();
 	});
 
