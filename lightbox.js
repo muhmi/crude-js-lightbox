@@ -6,7 +6,36 @@ function Lightbox(options) {
 	this.selectedImage = 0;
 	var lb = this;
 	setTimeout(function() {lb.preload();}, 500);
-	$("body").append('<div id="'+this.id+'" class="lb-white_content"><img src="'+this.images[0]+'" id="'+this.id+'-pic"><img src="lb-left.png" id="'+this.id+'-left"/><img src="lb-right.png" id="'+this.id+'-right"/></div>'); 
+	var div= $('<div id="'+this.id+'"><img src="'+this.images[0]+'" id="'+this.id+'-pic"><img src="lb-left.png" id="'+this.id+'-left"/><img src="lb-right.png" id="'+this.id+'-right"/></div>');
+	div.css("display", " none");
+	div.css("position", " absolute");
+	div.css("top", "0%");
+	div.css("left", "0%");
+	div.css("padding", "0px");
+	div.css("border", "10px solid #fff");
+	div.css("background-color", " #000000");
+	div.css("z-index", "1002");
+	div.css("overflow", " hidden");
+	div.css("-moz-border-radius", " 5px"); 
+	div.css("-webkit-border-radius", " 5px"); 
+	$("body").append(div); 
+
+	var overlay = $("<div></div");
+	
+	overlay.css("display", "none");
+	overlay.css("position", "absolute");
+	overlay.css("top", " 0%");
+	overlay.css("left", " 0%");
+	overlay.css("width", " 100%");
+	overlay.css("height", " 100%");
+	overlay.css("background-color", "black");
+	overlay.css("z-index", "1001");
+	overlay.css("-moz-opacity", " 0.8");
+	overlay.css("opacity", ".80");
+	overlay.css("filter", "alpha(opacity=80)");	
+	
+	$("body").append(overlay);
+	this.overlay = overlay;
 	
 	$(document).click(function() {
 		
@@ -30,6 +59,7 @@ function Lightbox(options) {
 }
 
 Lightbox.prototype.hide = function() {
+	this.overlay.fadeOut();
 	$("#"+this.id).fadeOut();
 	this.state = 'hidden';	
 }
@@ -51,12 +81,18 @@ Lightbox.prototype.updateCss = function() {
 }
 
 Lightbox.prototype.preload = function() {
-	var html='<div class="lb-preloader">';
+	var html='<div>';
 	for (var i = 0; i< this.images.length; i++) {
 		html += '<img src="'+this.images[i]+'" width="0" height="0"/>';
 	}
 	html += '</div>';
-	$("body").append(html);	
+	var preloader = $(html);
+	preloader.css("position", "absolute");;
+	preloader.css("top", "-100px");
+	preloader.css("left", "-100px");
+	preloader.css("width","0px");
+	preloader.css("height","0px");
+	$("body").append(preloader);	
 }
 
 Lightbox.prototype.prev = function() {
@@ -81,6 +117,8 @@ Lightbox.prototype.next = function() {
 
 Lightbox.prototype.open = function() {
 	event.stopPropagation();
+	
+	this.overlay.fadeIn();
 						
 	this.state = 'visible';
 
